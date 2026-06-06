@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Art's Birthday Trip — 男鹿の旅</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+ *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+ :root {
+ --sand: #F5F0E8;
+ --ink: #1a1a18;
+ --muted: #6b6860;
+ --accent: #c85a1e;
+ --accent-light: #f0d4c0;
+ --water: #3a7ca5;
+ --water-light: #d4eaf7;
+ --green: #3a6b47;
+ --green-light: #d4ead8;
+ --gold: #b8862a;
+ --gold-light: #f5eacf;
+ --red: #b83232;
+ --red-light: #f5d4d4;
+ --line: rgba(26,26,24,0.13);
+ --bg: #faf8f4;
+ --card-bg: #ffffff;
+ --tag-bg: #f0ece4;
+ }
+
+ html { scroll-behavior: smooth; }
+
+ body {
+ background: var(--bg);
+ font-family: 'Zen Kaku Gothic New', sans-serif;
+ color: var(--ink);
+ min-height: 100vh;
+ font-size: 16px;
+ line-height: 1.6;
+ }
+
+ .app {
+ max-width: 700px;
+ margin: 0 auto;
+ padding: 0 0 4rem;
+ }
+
+ /* ── Header ── */
+ .trip-header {
+ text-align: center;
+ padding: 2.5rem 1.5rem 2rem;
+ border-bottom: 1px solid var(--line);
+ margin-bottom: 2rem;
+ }
+ .trip-header .label {
+ font-size: 13px;
+ letter-spacing: 0.15em;
+ color: var(--muted);
+ margin-bottom: 0.5rem;
+ }
+ .trip-header h1 {
+ font-family: 'Noto Serif JP', serif;
+ font-size: 30px;
+ font-weight: 700;
+ color: var(--ink);
+ line-height: 1.35;
+ }
+ .trip-header .sub {
+ font-size: 15px;
+ color: var(--muted);
+ margin-top: 0.5rem;
+ }
+ .gift-badge {
+ display: inline-flex;
+ align-items: center;
+ gap: 6px;
+ background: var(--accent-light);
+ color: var(--accent);
+ font-size: 13px;
+ font-weight: 700;
+ padding: 5px 14px;
+ border-radius: 24px;
+ margin-top: 0.75rem;
+ letter-spacing: 0.04em;
+ }
+
+ /* ── Day Tabs ── */
+ .day-tabs {
+ display: flex;
+ gap: 8px;
+ padding: 0 1.25rem;
+ margin-bottom: 2rem;
+ }
+ .day-tab {
+ flex: 1;
+ padding: 0.75rem 0.5rem;
+ border: 1px solid var(--line);
+ border-radius: 10px;
+ background: var(--card-bg);
+ cursor: pointer;
+ text-align: center;
+ font-family: 'Zen Kaku Gothic New', sans-serif;
+ transition: all 0.2s ease;
+ }
+ .day-tab:hover { border-color: rgba(26,26,24,0.3); }
+ .day-tab .day-num { font-size: 12px; color: var(--muted); }
+ .day-tab .day-label { font-size: 15px; font-weight: 700; color: var(--ink); margin-top: 2px; }
+ .day-tab .day-date { font-size: 12px; color: var(--muted); margin-top: 2px; }
+ .day-tab.active { background: var(--ink); border-color: var(--ink); }
+ .day-tab.active .day-num,
+ .day-tab.active .day-label,
+ .day-tab.active .day-date { color: #fff; }
+ .day-tab.birthday.active { background: var(--accent); border-color: var(--accent); }
+
+ /* ── Day Content ── */
+ .day-content { display: none; padding: 0 1.25rem; }
+ .day-content.active { display: block; }
+
+ /* ── Train Card ── */
+ .train-card {
+ background: var(--water-light);
+ border-radius: 14px;
+ padding: 1.25rem 1.5rem;
+ margin-bottom: 1.5rem;
+ }
+ .train-header {
+ display: flex;
+ align-items: center;
+ gap: 8px;
+ margin-bottom: 1rem;
+ }
+ .train-header i { color: var(--water); font-size: 22px; }
+ .train-header .t-title { font-size: 15px; font-weight: 700; color: var(--water); }
+ .train-route {
+ display: flex;
+ align-items: center;
+ gap: 8px;
+ }
+ .train-station { text-align: center; }
+ .train-station .s-name { font-size: 17px; font-weight: 700; color: var(--ink); }
+ .train-station .s-time { font-size: 13px; color: var(--muted); margin-top: 2px; }
+ .train-arrow {
+ flex: 1;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ gap: 4px;
+ position: relative;
+ }
+ .train-arrow::before, .train-arrow::after {
+ content: '';
+ flex: 1;
+ height: 1px;
+ background: var(--water);
+ opacity: 0.5;
+ }
+ .train-seat { font-size: 13px; color: var(--muted); text-align: center; margin-top: 0.75rem; }
+
+ /* ── Timeline ── */
+ .timeline { position: relative; }
+ .timeline::before {
+ content: '';
+ position: absolute;
+ left: 38px;
+ top: 0; bottom: 0;
+ width: 1px;
+ background: var(--line);
+ }
+
+ /* ── Event row ── */
+ .event {
+ display: flex;
+ margin-bottom: 8px;
+ position: relative;
+ }
+ .event-time-col {
+ width: 76px;
+ flex-shrink: 0;
+ padding-top: 16px;
+ text-align: right;
+ padding-right: 12px;
+ }
+ .event-time {
+ font-size: 13px;
+ font-weight: 700;
+ color: var(--muted);
+ line-height: 1;
+ }
+ .event-dot-col {
+ width: 16px;
+ flex-shrink: 0;
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ padding-top: 20px;
+ position: relative;
+ z-index: 1;
+ }
+ .event-dot {
+ width: 12px;
+ height: 12px;
+ border-radius: 50%;
+ background: var(--ink);
+ border: 2.5px solid var(--bg);
+ box-shadow: 0 0 0 1.5px var(--ink);
+ flex-shrink: 0;
+ }
+ .event-card-col {
+ flex: 1;
+ padding-left: 16px;
+ padding-bottom: 4px;
+ }
+
+ /* ── Event Card ── */
+ .event-card {
+ border: 1px solid var(--line);
+ border-radius: 12px;
+ padding: 14px 16px;
+ background: var(--card-bg);
+ cursor: pointer;
+ transition: all 0.2s ease;
+ }
+ .event-card:hover { border-color: rgba(26,26,24,0.28); background: #fefcf8; }
+ .event-card-header { display: flex; align-items: flex-start; gap: 10px; }
+ .event-icon {
+ width: 34px;
+ height: 34px;
+ border-radius: 8px;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ font-size: 17px;
+ flex-shrink: 0;
+ }
+ .event-title-wrap { flex: 1; }
+ .event-title { font-size: 15px; font-weight: 700; color: var(--ink); line-height: 1.35; }
+ .event-subtitle { font-size: 13px; color: var(--muted); margin-top: 3px; }
+
+ /* ── Tags ── */
+ .event-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 10px; }
+ .tag {
+ font-size: 12px;
+ font-weight: 700;
+ padding: 3px 10px;
+ border-radius: 24px;
+ display: inline-flex;
+ align-items: center;
+ gap: 4px;
+ }
+ .tag-reserved { background: var(--green-light); color: var(--green); }
+ .tag-walk-in { background: var(--gold-light); color: #7a5208; }
+ .tag-present { background: var(--red-light); color: var(--red); }
+ .tag-move { background: var(--water-light); color: var(--water); }
+ .tag-note { background: var(--accent-light); color: var(--accent); }
+
+ /* ── Event Details ── */
+ .event-details {
+ display: none;
+ margin-top: 12px;
+ padding-top: 12px;
+ border-top: 1px solid var(--line);
+ }
+ .event-details.open { display: block; }
+ .event-detail-row {
+ display: flex;
+ align-items: flex-start;
+ gap: 8px;
+ margin-bottom: 8px;
+ font-size: 14px;
+ }
+ .event-detail-row i { color: var(--muted); flex-shrink: 0; margin-top: 2px; font-size: 17px; }
+ .event-detail-text { color: var(--muted); line-height: 1.55; }
+ .map-link {
+ display: inline-flex;
+ align-items: center;
+ gap: 5px;
+ color: var(--water);
+ font-size: 13px;
+ font-weight: 700;
+ text-decoration: none;
+ }
+ .map-link:hover { text-decoration: underline; }
+
+ /* ── Transport row ── */
+ .transport-event {
+ display: flex;
+ margin-bottom: 8px;
+ }
+ .transport-card {
+ flex: 1;
+ margin-left: 16px;
+ background: #f0ece4;
+ border-radius: 10px;
+ padding: 10px 16px;
+ display: flex;
+ align-items: center;
+ gap: 10px;
+ }
+ .transport-card i { font-size: 20px; color: var(--muted); }
+ .transport-card .t-text { font-size: 14px; color: var(--muted); }
+ .transport-card .t-text strong { color: var(--ink); }
+
+ /* ── Birthday banner ── */
+ .birthday-banner {
+ background: var(--accent-light);
+ border-radius: 14px;
+ padding: 1rem 1.25rem;
+ margin-bottom: 1.25rem;
+ display: flex;
+ align-items: center;
+ gap: 12px;
+ }
+ .birthday-banner .b-emoji { font-size: 28px; }
+ .birthday-banner .b-title { font-size: 15px; font-weight: 700; color: var(--accent); }
+ .birthday-banner .b-sub { font-size: 13px; color: #8a4010; margin-top: 2px; }
+
+ /* ── FYI Box ── */
+ .fyi-box {
+ background: var(--gold-light);
+ border-left: 3px solid var(--gold);
+ border-radius: 0 10px 10px 0;
+ padding: 0.9rem 1.1rem;
+ margin: 0 0 1.25rem;
+ font-size: 14px;
+ color: #5a4010;
+ line-height: 1.65;
+ }
+ .fyi-box strong { color: #3a2a08; }
+
+ /* ── Day 3 ── */
+ .day3-card {
+ border: 1.5px dashed var(--muted);
+ border-radius: 14px;
+ padding: 2rem 1.5rem;
+ text-align: center;
+ margin: 0 0 1.5rem;
+ background: var(--card-bg);
+ }
+ .day3-card .d3-emoji { font-size: 36px; margin-bottom: 1rem; }
+ .day3-card h3 {
+ font-family: 'Noto Serif JP', serif;
+ font-size: 20px;
+ color: var(--ink);
+ margin-bottom: 0.6rem;
+ }
+ .day3-card p { font-size: 15px; color: var(--muted); line-height: 1.75; margin-bottom: 1.25rem; }
+ .idea-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+ .idea-chip {
+ display: inline-flex;
+ align-items: center;
+ gap: 5px;
+ border: 1px solid var(--line);
+ border-radius: 24px;
+ padding: 7px 14px;
+ font-size: 14px;
+ color: var(--ink);
+ cursor: default;
+ background: var(--card-bg);
+ font-family: 'Zen Kaku Gothic New', sans-serif;
+ }
+
+ /* ── Present highlight ── */
+ .event-card.present-card { border-color: var(--red); border-width: 1.5px; }
+
+ /* ── Responsive ── */
+ @media (max-width: 480px) {
+ .trip-header h1 { font-size: 24px; }
+ .day-tab .day-label { font-size: 13px; }
+ .event-title { font-size: 14px; }
+ }
+</style>
+</head>
+<body>
+<div class="app">
+
+ <!-- HEADER -->
+ <div class="trip-header">
+ <div class="label">2025.06.15–17 秋田県男鹿市</div>
+ <h1>Art's Birthday Trip<br>男鹿の旅</h1>
+ <div class="sub">2泊3日 · レンタカー旅</div>
+ <div class="gift-badge"> バースデー旅行</div>
+ </div>
+
+ <!-- TABS -->
+ <div class="day-tabs">
+ <button class="day-tab active" onclick="switchDay(0)">
+ <div class="day-num">Day 1</div>
+ <div class="day-label">移動・到着</div>
+ <div class="day-date">6/15(日)</div>
+ </button>
+ <button class="day-tab birthday" onclick="switchDay(1)">
+ <div class="day-num">Day 2</div>
+ <div class="day-label"> Birthday</div>
+ <div class="day-date">6/16(月)</div>
+ </button>
+ <button class="day-tab" onclick="switchDay(2)">
+ <div class="day-num">Day 3</div>
+ <div class="day-label">No Plan</div>
+ <div class="day-date">6/17(火)</div>
+ </button>
+ </div>
+
+ <!-- ══════════════ DAY 1 ══════════════ -->
+ <div class="day-content active" id="day-0">
+
+ <div class="train-card">
+ <div class="train-header">
+ 
+ <span class="t-title">新幹線 こまち — チケット手配済み</span>
+ </div>
+ <div class="train-route">
+ <div class="train-station">
+ <div class="s-name">東京駅</div>
+ <div class="s-time">07:32</div>
+ </div>
+ <div class="train-arrow"></div>
+ <div class="train-station">
+ <div class="s-name">秋田駅</div>
+ <div class="s-time">11:25</div>
+ </div>
+ </div>
+ <div class="train-seat">13号車 · 8番 C・D席</div>
+ </div>
+
+ <div class="timeline">
+
+ <div class="event">
+ <div class="event-time-col"><span class="event-time">11:25</span></div>
+ <div class="event-dot-col"><div class="event-dot" style="background:var(--water)"></div></div>
+ <div class="event-card-col">
+ <div class="event-card" onclick="toggleEvent(this)">
+ <div class="event-card-header">
+ <div class="event-icon" style="background:var(--water-light)"></div>
+ <div class="event-title-wrap">
+ <div class="event-title">ニッポンレンタカー 秋田東口</div>
+ <div class="event-subtitle">11:25〜11:40 · レンタカーPickUp</div>
+ </div>
+ </div>
+ <div class="event-tags">
+ <span class="tag tag-reserved"> 11:30 予約済み</span>
+ </div>
+ <div class="event-details">
+ <div class="event-detail-row">
+ 
+ <span class="event-detail-text">秋田駅東口 · ニッポンレンタカー</span>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+
+ <div class="event">
+ <div class="event-time-col"><span class="event-time">11:40</span></div>
+ <div class="event-dot-col"><div class="event-dot" style="background:var(--gold)"></div></div>
+ <div class="event-card-col">
+ <div class="event-card" onclick="toggleEvent(this)">
+ <div class="event-card-header">
+ <div class="event-icon" style="background:var(--gold-light)"></div>
+ <div class="event-title-wrap">
+ <div class="event-title">ランチ① 寛文五年堂 秋田店</div>
+ <div class="event-subtitle">11:40〜13:00 · 秋田うどん</div>
+ </div>
+ </div>
+ <div class="event-tags">
+ <span class="tag tag-reserved"> 11:45 予約リクエスト済み</span>
+ </div>
+ <div class="event-details">
+ <div class="event-detail-row">
+ 
+ <span class="event-detail-text">秋田の名物うどん。ゆっくりランチで新幹線の疲れを癒そう。</span>
+ </div>
+ <div class="event-detail-row">
+ 
+ <span class="event-detail-text">
+ <a class="map-link" href="https://maps.app.goo.gl/cm3t18zqfuhZ9Q3v7" target="_blank"> Google Maps で開く</a>
+ </span>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+
+ <div class="transport-event">
+ <div class="event-time-col" style="padding-top:10px"><span class="event-time">13:00</span></div>
+ <div class="event-dot-col" style="padding-top:13px"><div class="event-dot" style="background:var(--muted);width:9px;height:9px"></div></div>
+ <div class="transport-card">
+ 
+ <span class="t-text">車移動 <strong>秋田駅 → 男鹿市</strong>（約1時間）</span>
+ </div>
+ </div>
+
+ <div class="event">
+ <div class="event-time-col"><span class="event-time">14:00</span></div>
+ <div class="event-dot-col"><div class="event-dot" style="background:var(--accent)"></div></div>
+ <div class="event-card-col">
+ <div class="event-card" onclick="toggleEvent(this)">
+ <div class="event-card-header">
+ <div class="event-icon" style="background:var(--accent-light)"></div>
+ <div class="event-title-wrap">
+ <div class="event-title">ランチ② PZ (Pizza)</div>
+ <div class="event-subtitle">14:00〜14:40 · 男鹿市</div>
+ </div>
+ </div>
+ <div class="event-tags">
+ <span class="tag tag-walk-in"> 飛び込み</span>
+ <span class="tag tag-note">営業 11:30〜14:30</span>
+ </div>
+ <div class="event-details">
+ <div class="event-detail-row">
+ 
+ <span class="event-detail-text">14:30閉店のため早めに到着すること！</span>
+ </div>
+ <div class="event-detail-row">
+ 
+ <span class="event-detail-text">
+ <a class="map-link" href="https://maps.app.goo.gl/m62L3ZoDih6KSdbK9" target="_blank"> Google Maps で開く</a>
+ </span>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+
+ <div class="event">
+ <div class="event-time-col"><span class="event-time">14:40</span></div>
+ <div class="event-dot-col"><div class="event-dot" style="background:var(--green)"></div></div>
+ <div class="event-card-col">
+ <div class="event-card" onclick="toggleEvent(this)">
+ <div class="event-card-header">
+ <div class="event-icon" style="background:var(--green-light)"></div>
+ <div class="event-title-wrap">
+ <div class="event-title">稲とアガベ醸造所 / 土と風</div>
+ <div class="event-subtitle">14:40〜15:00 · クラフト酒購入</div>
+ </div>
+ </div>
+ <div class="event-tags">
+ <span class="tag tag-walk-in">お買い物</span>
+ </div>
+ <div class="event-details">
+ <div class="event-detail-row">
+ 
+ <span class="event-detail-text">男鹿のクラフトお酒専門店。お土産やホテルで楽しむ一本をゲット。</span>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+
+ <div class="event">
+ <div class="event-time-col"><span class="event-time">15:10</span></div>
+ <div class="event-dot-col"><div class="event-dot" style="background:var(--ink)"></div></div>
+ <div class="event-card-col">
+ <div class="event-card" onclick="toggleEvent(this)">
+ <div class="event-card-header">
+ <div class="event-icon" style="background:#ede9e0"></div>
+ <div class="event-title-wrap">
+ <div class="event-title">チェックイン — Oga 山人</div>
+ <div class="event-subtitle">15:10〜 · 今夜のお宿</div>
+ </div>
+ </div>
+ <div class="event-tags">
+ <span class="tag tag-reserved"> 宿泊予約済み</span>
+ </div>
+ <div class="event-details">
+ <div class="event-detail-row">
+ 
+ <span class="event-detail-text">
+ <a class="map-link" href="https://maps.app.goo.gl/t42DkefX9UiDvon86" target="_blank"> Google Maps で開く</a>
+ </span>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+
+ <div class="event">
+ <div class="event-time-col"><span class="event-time">16:00</span></div>
+ <div class="event-dot-col"><div class="event-dot" style="background:var(--red)"></div></div>
+ <div class="event-card-col">
+ <div class="event-card present-card" onclick="toggleEvent(this)">
+ <div class="event-card-header">
+ <div class="event-icon" style="background:var(--red-light)"></div>
+ <div class="event-title-wrap">
+ <div class="event-title">Private 温泉 First Present</div>
+ <div class="event-subtitle">16:00〜16:30 · Oga 山人</div>
+ </div>
+ </div>
+ <div class="event-tags">
+ <span class="tag tag-present"> First Present</span>
+ <span class="tag tag-reserved"> 16:00〜30分枠 予約済み</span>
+ </div>
+ <div class="event-details">
+ <div class="event-detail-row">
+ 
+ <span class="event-detail-text">プライベート温泉でゆっくりリラックス。旅の始まりのご褒美！</span>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+
+ <div class="event">
+ <div class="event-time-col"><span class="event-time">18:00</span></div>
+ <div class="event-dot-col"><div class="event-dot" style="background:var(--gold)"></div></div>
+ <div class="event-card-col">
+ <div class="event-card" onclick="toggleEvent(this)">
+ <div class="event-card-header">
+ <div class="event-icon" style="background:var(--gold-light)"></div>
+ <div class="event-title-wrap">
+ <div class="event-title">夕飯 — 寿し陣</div>
+ <div class="event-subtitle">18:00〜 · お寿司</div>
+ </div>
+ </div>
+ <div class="event-tags">
+ <span class="tag tag-walk-in"> 飛び込み</span>
+ </div>
+ <div class="event-details">
+ <div class="event-detail-row">
+ 
+ <span class="event-detail-text">
+ <a class="map-link" href="https://maps.app.goo.gl/WizDrFnSPCVzrDUM8" target="_blank"> Google Maps で開く</a>
+ </span>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+
+ </div><!-- /timeline -->
+ </div><!-- /day-0 -->
+
+ <!-- ══════════════ DAY 2 ══════════════ -->
+ <div class="day-content" id="day-1">
+
+ <div class="birthday-banner">
+ <div class="b-emoji"></div>
+ <div>
+ <div class="b-title">Happy Birthday, Art！</div>
+ <div class="b-sub">今日はあなたの特別な一日。男鹿で最高の誕生日を！</div>
+ </div>
+ </div>
+
+ <div class="fyi-box">
+ <strong>FYI:</strong> 念のため 15:30〜30分のPrivate温泉枠も予約済み。他の予定を短縮できた場合に活用。不要なら前日キャンセルOK。
+ </div>
+
+ <div class="timeline">
+
+ <div class="event">
+ <div class="event-time-col"><span class="event-time">07:00</span></div>
+ <div class="event-dot-col"><div class="event-dot" style="background:var(--gold)"></div></div>
+ <div class="event-card-col">
+ <div class="event-card" onclick="toggleEvent(this)">
+ <div class="event-card-header">
+ <div class="event-icon" style="background:var(--gold-light)"></div>
+ <div class="event-title-wrap">
+ <div class="event-title">朝食 · 大浴場 · 朝散歩</div>
+ <div class="event-subtitle">07:00〜09:30 · Oga 山人</div>
+ </div>
+ </div>
+ <div class="event-tags">
+ <span class="tag tag-reserved"> 朝食予約済み</span>
+ </div>
+ <div class="event-details">
+ <div class="event-detail-row">
+ 
+ <span class="event-detail-text">朝食→大浴場でリフレッシュ→チェックアウト前に朝散歩でのんびり。</span>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+
+ <div class="transport-event">
+ <div class="event-time-col" style="padding-top:10px"><span class="event-time">09:40</span></div>
+ <div class="event-dot-col" style="padding-top:13px"><div class="event-dot" style="background:var(--muted);width:9px;height:9px"></div></div>
+ <div class="transport-card">
+ 
+ <span class="t-text">車移動 <strong>宿 → 入道崎</strong>（約50分）</span>
+ </div>
+ </div>
+
+ <div class="event">
+ <div class="event-time-col"><span class="event-time">10:30</span></div>
+ <div class="event-dot-col"><div class="event-dot" style="background:var(--water)"></div></div>
+ <div class="event-card-col">
+ <div class="event-card" onclick="toggleEvent(this)">
+ <div class="event-card-header">
+ <div class="event-icon" style="background:var(--water-light)"></div>
+ <div class="event-title-wrap">
+ <div class="event-title">入道崎 お散歩</div>
+ <div class="event-subtitle">10:30〜11:00 · 男鹿半島の絶景</div>
+ </div>
+ </div>
+ <div class="event-details">
+ <div class="event-detail-row">
+ 
+ <span class="event-detail-text">男鹿半島最北端の岬。白黒縞模様の灯台と広がる日本海を満喫。</span>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+
+ <div class="event">
+ <div class="event-time-col"><span class="event-time">11:00</span></div>
+ <div class="event-dot-col"><div class="event-dot" style="background:var(--gold)"></div></div>
+ <div class="event-card-col">
+ <div class="event-card" onclick="toggleEvent(this)">
+ <div class="event-card-header">
+ <div class="event-icon" style="background:var(--gold-light)"></div>
+ <div class="event-title-wrap">
+ <div class="event-title">ランチ — お食事処 美野幸</div>
+ <div class="event-subtitle">11:00〜12:20 · 天然真鯛の石焼</div>
+ </div>
+ </div>
+ <div class="event-tags">
+ <span class="tag tag-walk-in"> 飛び込み</span>
+ </div>
+ <div class="event-details">
+ <div class="event-detail-row">
+ 
+ <span class="event-detail-text">入道崎近くの名物グルメ！天然真鯛の石焼は絶対食べたい一品。</span>
+ </div>
+ <div class="event-detail-row">
+ 
+ <span class="event-detail-text">
+ <a class="map-link" href="https://maps.app.goo.gl/qcgXhsVghRZbWL6L7" target="_blank"> Google Maps で開く</a>
+ </span>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+
+ <div class="transport-event">
+ <div class="event-time-col" style="padding-top:10px"><span class="event-time">12:20</span></div>
+ <div class="event-dot-col" style="padding-top:13px"><div class="event-dot" style="background:var(--muted);width:9px;height:9px"></div></div>
+ <div class="transport-card">
+ 
+ <span class="t-text">車移動 <strong>入道崎 → 水族館</strong>（約15分）</span>
+ </div>
+ </div>
+
+ <div class="event">
+ <div class="event-time-col"><span class="event-time">12:40</span></div>
+ <div class="event-dot-col"><div class="event-dot" style="background:var(--water)"></div></div>
+ <div class="event-card-col">
+ <div class="event-card" onclick="toggleEvent(this)">
+ <div class="event-card-header">
+ <div class="event-icon" style="background:var(--water-light)"></div>
+ <div class="event-title-wrap">
+ <div class="event-title">男鹿水族館 GAO</div>
+ <div class="event-subtitle">12:40〜14:40 · 2時間たっぷり</div>
+ </div>
+ </div>
+ <div class="event-tags">
+ <span class="tag tag-walk-in">現地チケット購入</span>
+ </div>
+ <div class="event-details">
+ <div class="event-detail-row">
+ 
+ <span class="event-detail-text">
+ <a class="map-link" href="https://maps.app.goo.gl/PLUxgWSdZscCRtxDA" target="_blank"> Google Maps で開く</a>
+ </span>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+
+ <!-- NEW: 水族館 → TOMOSU -->
+ <div class="transport-event">
+ <div class="event-time-col" style="padding-top:10px"><span class="event-time">14:40</span></div>
+ <div class="event-dot-col" style="padding-top:13px"><div class="event-dot" style="background:var(--muted);width:9px;height:9px"></div></div>
+ <div class="transport-card">
+ 
+ <span class="t-text">車移動 <strong>水族館 → TOMOSU CAFE</strong>（約35分）</span>
+ </div>
+ </div>
+
+ <div class="event">
+ <div class="event-time-col"><span class="event-time">15:20</span></div>
+ <div class="event-dot-col"><div class="event-dot" style="background:var(--accent)"></div></div>
+ <div class="event-card-col">
+ <div class="event-card" onclick="toggleEvent(this)">
+ <div class="event-card-header">
+ <div class="event-icon" style="background:var(--accent-light)"></div>
+ <div class="event-title-wrap">
+ <div class="event-title">TOMOSU CAFE — プリン</div>
+ <div class="event-subtitle">15:20〜16:20 · カフェ休憩</div>
+ </div>
+ </div>
+ <div class="event-details">
+ <div class="event-detail-row">
+ 
+ <span class="event-detail-text">
+ <a class="map-link" href="https://maps.app.goo.gl/uRJerfnD3xNTcRPC9" target="_blank"> Google Maps で開く</a>
+ </span>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+
+ <!-- NEW: TOMOSU → マッサージ -->
+ <div class="transport-event">
+ <div class="event-time-col" style="padding-top:10px"><span class="event-time">16:20</span></div>
+ <div class="event-dot-col" style="padding-top:13px"><div class="event-dot" style="background:var(--muted);width:9px;height:9px"></div></div>
+ <div class="transport-card">
+ 
+ <span class="t-text">車移動 <strong>TOMOSU → マッサージ</strong>（約30分）</span>
+ </div>
+ </div>
+
+ <div class="event">
+ <div class="event-time-col"><span class="event-time">16:30</span></div>
+ <div class="event-dot-col"><div class="event-dot" style="background:var(--red)"></div></div>
+ <div class="event-card-col">
+ <div class="event-card present-card" onclick="toggleEvent(this)">
+ <div class="event-card-header">
+ <div class="event-icon" style="background:var(--red-light)"></div>
+ <div class="event-title-wrap">
+ <div class="event-title">マッサージ Second Present</div>
+ <div class="event-subtitle">16:30〜17:30 · 60分コース</div>
+ </div>
+ </div>
+ <div class="event-tags">
+ <span class="tag tag-present"> Second Present</span>
+ <span class="tag tag-reserved"> 予約済み</span>
+ </div>
+ <div class="event-details">
+ <div class="event-detail-row">
+ 
+ <span class="event-detail-text">リラクゼーションサロンいこい（60分コース）。その間、すひは休憩。</span>
+ </div>
+ <div class="event-detail-row">
+ 
+ <span class="event-detail-text">
+ <a class="map-link" href="https://maps.app.goo.gl/hcieJiSHSKB8VkjF6" target="_blank"> Google Maps で開く</a>
+ </span>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+
+ <div class="event">
+ <div class="event-time-col"><span class="event-time">18:00</span></div>
+ <div class="event-dot-col"><div class="event-dot" style="background:var(--ink)"></div></div>
+ <div class="event-card-col">
+ <div class="event-card" onclick="toggleEvent(this)">
+ <div class="event-card-header">
+ <div class="event-icon" style="background:#ede9e0"></div>
+ <div class="event-title-wrap">
+ <div class="event-title">夕飯 — 居酒屋 秀</div>
+ <div class="event-subtitle">18:00〜 · バースデーディナー </div>
+ </div>
+ </div>
+ <div class="event-tags">
+ <span class="tag tag-walk-in"> 飛び込み</span>
+ </div>
+ <div class="event-details">
+ <div class="event-detail-row">
+ 
+ <span class="event-detail-text">
+ <a class="map-link" href="https://maps.app.goo.gl/MEwTho2SKkFsz8ddA" target="_blank"> Google Maps で開く</a>
+ </span>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+
+ </div><!-- /timeline -->
+ </div><!-- /day-1 -->
+
+ <!-- ══════════════ DAY 3 ══════════════ -->
+ <div class="day-content" id="day-2">
+
+ <div class="day3-card">
+ <div class="d3-emoji"></div>
+ <h3>No Plan Day</h3>
+ <p>今日はアートが行きたいところへ！<br>ゆったり男鹿・秋田を満喫しよう。</p>
+ <div class="idea-chips">
+ <span class="idea-chip"> 朝市・市場 海鮮</span>
+ <span class="idea-chip"> 秋田市内観光</span>
+ <span class="idea-chip"> 男鹿の隠れスポット</span>
+ <span class="idea-chip"> カフェ・スイーツ</span>
+ <span class="idea-chip"> お土産探し</span>
+ </div>
+ </div>
+
+ <div class="timeline">
+
+ <div class="event">
+ <div class="event-time-col"><span class="event-time">16:30</span></div>
+ <div class="event-dot-col"><div class="event-dot" style="background:var(--water)"></div></div>
+ <div class="event-card-col">
+ <div class="event-card" onclick="toggleEvent(this)">
+ <div class="event-card-header">
+ <div class="event-icon" style="background:var(--water-light)"></div>
+ <div class="event-title-wrap">
+ <div class="event-title">レンタカー返却</div>
+ <div class="event-subtitle">16:30 · 秋田駅</div>
+ </div>
+ </div>
+ <div class="event-tags">
+ <span class="tag tag-reserved"> 返却予定</span>
+ </div>
+ </div>
+ </div>
+ </div>
+
+ </div>
+
+ <div class="train-card" style="margin-top:1rem">
+ <div class="train-header">
+ 
+ <span class="t-title">新幹線 こまち — 帰路</span>
+ </div>
+ <div class="train-route">
+ <div class="train-station">
+ <div class="s-name">秋田駅</div>
+ <div class="s-time">17:10</div>
+ </div>
+ <div class="train-arrow"></div>
+ <div class="train-station">
+ <div class="s-name">東京駅</div>
+ <div class="s-time">21:04</div>
+ </div>
+ </div>
+ <div class="train-seat">思い出いっぱいで帰ろう </div>
+ </div>
+
+ </div><!-- /day-2 -->
+
+</div><!-- /app -->
+
+<script>
+function switchDay(idx) {
+ document.querySelectorAll('.day-content').forEach(function(el, i) {
+ el.classList.toggle('active', i === idx);
+ });
+ document.querySelectorAll('.day-tab').forEach(function(el, i) {
+ el.classList.toggle('active', i === idx);
+ });
+}
+
+function toggleEvent(card) {
+ var details = card.querySelector('.event-details');
+ if (!details) return;
+ var isOpen = details.classList.toggle('open');
+ card.style.background = isOpen ? '#f8f5ef' : '';
+}
+</script>
+</body>
+</html>
